@@ -5,9 +5,9 @@ app.use(express.json())
 const jwt = require('jsonwebtoken')
 const db = require('./db')
 const modelUser = require('./models/user')
-const SECRET = 'ILOVEYOU'
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
+const SECRET = 'ILOVEYOU'
 
 app.get('/', (req, res) => {
   res.send('hello world')
@@ -15,8 +15,13 @@ app.get('/', (req, res) => {
 
 app.post('/register', async (req, res) => {
   let data = await modelUser.create(req.body)
-  res.send(data)
+  res.send({
+    err_code: 0,
+    data,
+    msg: "注册成功"
+  })
 })
+
 app.post('/login', async (req, res) => {
   let data = await modelUser.findOne({
     username: req.body.username
@@ -35,8 +40,12 @@ app.post('/login', async (req, res) => {
     expiresIn: 60 * 60 * 24
   })
   res.send({
-    user: data,
-    token
+    err_code: 0,
+    data: {
+      user: data,
+      token
+    },
+    msg: "登录成功"
   })
 })
 
