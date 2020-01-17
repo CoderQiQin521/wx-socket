@@ -1,0 +1,18 @@
+@base = http://127.0.0.1:3000
+POST {{base}}/register
+content-type: application/json
+
+{
+  "username": "18538300839",
+  "password": "123456",
+  "nickname": "沙皮狗"
+}
+
+###
+POST {{base}}/login
+content-type: application/json
+
+{
+  "username": "18538300839",
+  "password": "123456"
+}
