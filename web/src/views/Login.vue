@@ -3,13 +3,13 @@
     <van-nav-bar title="登录" />
 
     <transition name="van-slide-down">
-      <div class="text-center" v-show="visible">
+      <div class="logo-warp text-center">
         <img class="logo" src="@/assets/wx.png" alt />
       </div>
     </transition>
     <van-cell-group>
-      <van-field label="帐号" v-model="user.username" placeholder="请输入帐号" />
-      <van-field label="密码" type="password" v-model="user.password" placeholder="请输入密码" />
+      <van-field label="账号" v-model="user.username" required placeholder="请输入账号" />
+      <van-field label="密码" type="password" v-model="user.password" required placeholder="请输入密码" />
     </van-cell-group>
     <div style="padding: 20px;">
       <van-button type="primary" round block @click="login">登录</van-button>
@@ -22,24 +22,24 @@
 
 <script>
 import { Dialog } from "vant";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      visible: "",
+      visible: true,
       user: {}
     };
   },
   methods: {
+    ...mapActions(["loginAction"]),
     toRegister() {
       this.$router.push("/register");
     },
     async login() {
-      let { err_code, data, msg } = await this.$api.login(this.user);
-      if (err_code === 0) {
-        Dialog({ message: `欢迎${data.user.nickname}登录` });
-        // Toast(msg);
-        // setTimeout(() => {
-        // }, 1500);
+      if (this.user.username && this.user.password) {
+        this.loginAction(this.user);
+      } else {
+        Dialog({ message: "请填写完整信息" });
       }
     }
   }

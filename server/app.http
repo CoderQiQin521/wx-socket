@@ -16,3 +16,5 @@ content-type: application/json
   "username": "18538300839",
   "password": "123456"
 }
+###
+GET {{base}}/firend

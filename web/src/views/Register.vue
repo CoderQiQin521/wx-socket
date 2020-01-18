@@ -1,8 +1,13 @@
 <template>
   <div>
     <van-nav-bar title="注册" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <transition name="van-slide-down">
+      <div class="logo-warp text-center">
+        <img class="logo" src="@/assets/wx.png" alt />
+      </div>
+    </transition>
     <van-cell-group>
-      <van-field label="帐号" v-model="user.username" placeholder="请输入帐号" />
+      <van-field label="账号" v-model="user.username" placeholder="请输入账号" />
       <van-field label="昵称" v-model="user.nickname" placeholder="请输入昵称" />
       <van-field label="密码" type="password" v-model="user.password" placeholder="请输入密码" />
     </van-cell-group>
@@ -38,10 +43,4 @@ export default {
 </script>
 
 <style>
-.van-nav-bar__text {
-  color: #323233;
-}
-.van-nav-bar .van-icon {
-  color: #323233;
-}
 </style>

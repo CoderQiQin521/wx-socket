@@ -16,12 +16,36 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
   },
   {
+    path: '/room',
+    name: 'room',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Room.vue')
+  },
+  {
+    path: '/privatechat',
+    name: 'privatechat',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Privatechat.vue')
+  },
+  {
+    path: '/add',
+    name: 'add',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AddFirend.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,
     children: [{
       path: '',
       component: () => import(/* webpackChunkName: "about" */ '../views/Message.vue')
+    }, {
+      path: 'contacts',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Contacts.vue')
+    }, {
+      path: 'find',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Find.vue')
+    }, {
+      path: 'user',
+      component: () => import(/* webpackChunkName: "about" */ '../views/User.vue')
     }]
   }
 ]
