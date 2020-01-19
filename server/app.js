@@ -2,7 +2,7 @@
  * @Author: coderqiqin@aliyun.com 
  * @Date: 2020-01-18 19:27:42 
  * @Last Modified by: CoderQiQin
- * @Last Modified time: 2020-01-18 22:24:56
+ * @Last Modified time: 2020-01-19 14:48:11
  */
 
 /* ----------------------------------- lib ---------------------------------- */
@@ -41,15 +41,30 @@ app.get('/', (req, res) => {
 // 聊天相关
 io.on('connect', socket => {
   const socketId = socket.id
+
   // 登录成功
   socket.on('login', async ({ id }) => {
+    console.log(123333333333333333333333);
+
     // 找到对应用户  用户id,和生成的socketId
     let data = await modelUser.findByIdAndUpdate(id, { socketid: socketId }, { new: true, upsert: true, strict: false })
   })
 
   socket.on('receiveComment', (res) => {
-    console.log('res: ', res);
-    io.to(res.from).emit('chat', res.message)
+
+    // console.log(io.sockets.sockets);
+    // let socketObj
+    // for (const key in io.sockets.sockets) {
+    //   if (io.sockets.sockets.hasOwnProperty(key)) {
+    //     const element = io.sockets.sockets[key];
+    //     if (element.id === res.from) {
+    //       socketObj = element
+    //     }
+
+    //   }
+    // }
+    // console.log('res: ', res);
+    // socketObj.emit('chat', { name: '服务端123' })
 
   })
 })

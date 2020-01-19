@@ -27,27 +27,34 @@
 </template>
 
 <script>
+import storage from "@/utils/storage";
 export default {
   data() {
     return {
       show: false,
-      value: ""
+      value: "",
+      userinfo: {}
     };
   },
   created() {
-    this.$socket.on("chat", res => {
+    this.userinfo = storage.getStorage("userInfo");
+  },
+  sockets: {
+    chat(res) {
       console.log("res: ", res);
-    });
+    }
   },
   methods: {
     onClickRight() {
       this.show = !this.show;
     },
     send() {
+      console.log(this.userinfo);
+
       this.$socket.emit("receiveComment", {
         message: this.value,
-        from: this.$route.query.id,
-        to: 123,
+        from: this.$route.query.id, // 发给谁
+        to: this.userinfo.user.socketid, // 来自谁的消息
         type: "private"
       });
       this.value = "";

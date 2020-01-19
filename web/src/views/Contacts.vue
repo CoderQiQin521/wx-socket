@@ -9,8 +9,7 @@
         v-for="(item,index) in firendList"
         :key="index"
         :title="item.nickname"
-        @click="$router.push('/privatechat?id'
-        +item.socketid)"
+        @click="$router.push(`/privatechat?id=${item.socketid}`)"
       />
     </van-index-bar>
   </div>

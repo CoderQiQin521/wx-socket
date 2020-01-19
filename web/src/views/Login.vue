@@ -38,10 +38,6 @@ export default {
     async login() {
       if (this.user.username && this.user.password) {
         this.loginAction(this.user).then(res => {
-          console.log("登陆成功");
-
-          console.log("res: ", res);
-
           this.$socket.emit("login", {
             id: res.user._id
           });
