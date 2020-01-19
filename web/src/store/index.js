@@ -3,12 +3,13 @@ import Vuex from 'vuex'
 import { login } from '@/http/api'
 import router from '@/router'
 import { Dialog } from "vant";
+import storage from '@/utils/storage'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: JSON.parse(localStorage.getItem('userInfo'))
+    userInfo: storage.getStorage('userInfo') || {}
   },
   getters: {
     getUserInfo: (state) => {
@@ -23,18 +24,23 @@ export default new Vuex.Store({
   actions: {
     async loginAction({ commit }, payload) {
       let { err_code, data, msg } = await login(payload);
-      if (err_code === 0) {
-        // const { user, token } = data
-        localStorage.setItem('userInfo', JSON.stringify(data))
-        commit('setUserInfo', data)
-        // TODO: 成功失败提醒
+      return new Promise((resolve, reject) => {
+        if (err_code === 0) {
+          // const { user, token } = data
+          storage.setStorage('userInfo', data)
+          commit('setUserInfo', data)
+          // TODO: 成功失败提醒
+          router.push('/')
+          resolve(data)
+          // Dialog({ message: `欢迎${data.user.nickname}登录` });
+          // Toast(msg);
+          // setTimeout(() => {
+          // }, 1500);
+        } else {
+          reject(data)
+        }
 
-        router.push('/')
-        // Dialog({ message: `欢迎${data.user.nickname}登录` });
-        // Toast(msg);
-        // setTimeout(() => {
-        // }, 1500);
-      }
+      })
     },
     logout({ commit }, payload) {
       Dialog.confirm({
@@ -43,8 +49,8 @@ export default new Vuex.Store({
       }).then(() => {
         // on confirm
         router.push('/login')
-        localStorage.removeItem('userInfo')
         commit('setUserInfo', {})
+        localStorage.removeItem('userInfo')
       }).catch(() => {
         // on cancel
       });

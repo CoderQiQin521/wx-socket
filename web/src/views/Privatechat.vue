@@ -19,8 +19,8 @@
       </ul>
     </van-popup>
     <div class="fixed-bar">
-      <van-field v-model="sms" center clearable placeholder="请输入消息">
-        <van-button slot="button" size="small" type="primary">发送</van-button>
+      <van-field v-model="value" center clearable placeholder="请输入消息">
+        <van-button slot="button" size="small" type="primary" @click="send">发送</van-button>
       </van-field>
     </div>
   </div>
@@ -31,13 +31,26 @@ export default {
   data() {
     return {
       show: false,
-      sms: ""
+      value: ""
     };
   },
-  created() {},
+  created() {
+    this.$socket.on("chat", res => {
+      console.log("res: ", res);
+    });
+  },
   methods: {
     onClickRight() {
       this.show = !this.show;
+    },
+    send() {
+      this.$socket.emit("receiveComment", {
+        message: this.value,
+        from: this.$route.query.id,
+        to: 123,
+        type: "private"
+      });
+      this.value = "";
     }
   }
 };

@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { Toast } from 'vant';
 import router from '@/router'
+import storage from '@/utils/storage'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 
 axios.interceptors.request.use(config => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-  console.log('userInfo: ', userInfo);
+  const userInfo = storage.getStorage('userInfo')
   if (userInfo && userInfo.token) {
     config.headers['Authorization'] = 'Bearer ' + (userInfo.token || '')
   }
@@ -23,8 +23,6 @@ axios.interceptors.response.use(response => {
     Toast(msg);
   }
   if (err_code === 301) {
-    console.log('333333333333333');
-
     localStorage.clear()
     router.push('/login')
   }

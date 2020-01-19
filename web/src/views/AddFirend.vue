@@ -6,16 +6,15 @@
     </van-search>
     <ul class="searchList">
       <li class="searchList-item" v-for="item in searchList" :key="item._id">
-        <van-image
-          round
-          width="4rem"
-          height="4rem"
-          src="http://img.duoziwang.com/2018/18/06051452300689.jpg"
-        />
+        <van-image round width="4rem" height="4rem" src="@/assets/avatar.jpg" />
         <div class="searchList-item-content">
-          <div>{{item.nickname}}</div>
-          <div class="username">账号: {{item.username}}</div>
-          <van-button type="primary" @click="add(item._id)">添加好友</van-button>
+          <div>
+            <div>{{item.nickname}}</div>
+            <div class="username">账号: {{item.username}}</div>
+          </div>
+          {{item.socketId}}
+          <van-button type="primary" size="small" @click="add(item._id)">添加好友</van-button>
+          <van-button type="warning" size="small" @click="privateChat(item.socketid)">私聊</van-button>
         </div>
       </li>
     </ul>
@@ -43,6 +42,9 @@ export default {
       let { data } = await this.$api.add({
         uid: _id
       });
+    },
+    privateChat(_id) {
+      this.$router.push("/privatechat?id=" + _id);
     }
   }
 };
@@ -56,6 +58,9 @@ export default {
     padding: 10px 0;
     border-bottom: 1px solid #eee;
     &-content {
+      display: flex;
+      justify-content: space-between;
+      flex: 1;
       margin-left: 20px;
       .username {
         margin-top: 15px;

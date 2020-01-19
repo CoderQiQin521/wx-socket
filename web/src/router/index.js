@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Layout from '../views/Layout.vue'
+import storage from '@/utils/storage'
 
 Vue.use(VueRouter)
 
@@ -8,11 +9,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
+    meta: { publicAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   },
   {
     path: '/register',
     name: 'register',
+    meta: { publicAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
   },
   {
@@ -32,8 +35,8 @@ const routes = [
   },
   {
     path: '/',
-    name: 'home',
-    component: Home,
+    name: 'layout',
+    component: Layout,
     children: [{
       path: '',
       component: () => import(/* webpackChunkName: "about" */ '../views/Message.vue')
@@ -44,8 +47,8 @@ const routes = [
       path: 'find',
       component: () => import(/* webpackChunkName: "about" */ '../views/Find.vue')
     }, {
-      path: 'user',
-      component: () => import(/* webpackChunkName: "about" */ '../views/User.vue')
+      path: 'mine',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Mine.vue')
     }]
   }
 ]
@@ -54,6 +57,20 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  const { publicAuth } = to.meta
+  if (!publicAuth) {
+    // 判断是否存在token
+    let userInfo = storage.getStorage('userInfo')
+    if (userInfo) {
+      next()
+    } else {
+      next('/login')
+    }
+  }
+  next()
 })
 
 export default router

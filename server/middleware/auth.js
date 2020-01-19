@@ -1,27 +1,35 @@
+/*
+ * @Author: coderqiqin@aliyun.com 
+ * @Date: 2020-01-18 19:28:02 
+ * @Last Modified by: CoderQiQin
+ * @Last Modified time: 2020-01-18 21:42:12
+ */
+const jwt = require('jsonwebtoken')
+const modelUser = require('../models/user')
 module.exports = options => {
-  const jwt = require('jsonwebtoken')
-  const modelUser = require('../models/user')
 
   return async (req, res, next) => {
-    const token = String(req.headers['authorization' || '']).split(' ').pop()
+    const token = String(req.headers['authorization'] || '').split(' ').pop()
     if (!token) {
       return res.send({
         err_code: 300,
         data: {},
         msg: "请传token"
       })
+    } else {
+
+      const { id } = jwt.verify(token, req.app.get('secret'))
+      let data = await modelUser.findById(id)
+      if (!data) {
+        return res.send({
+          err_code: 301,
+          data: {},
+          msg: "token已过期"
+        })
+      }
+      req.uid = id
+      req.user = data
+      next()
     }
-    const { id } = jwt.verify(token, req.app.get('secret'))
-    let data = await modelUser.findById(id)
-    if (!data) {
-      return res.send({
-        err_code: 301,
-        data: {},
-        msg: "token已过期"
-      })
-    }
-    req.uid = id
-    req.user = data
-    await next()
   }
 }
