@@ -14,7 +14,7 @@
           </div>
           {{item.socketId}}
           <van-button type="primary" size="small" @click="add(item._id)">添加好友</van-button>
-          <van-button type="warning" size="small" @click="privateChat(item.socketid)">私聊</van-button>
+          <van-button type="warning" size="small" @click="privateChat(item._id)">私聊</van-button>
         </div>
       </li>
     </ul>

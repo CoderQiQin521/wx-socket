@@ -2,7 +2,7 @@
  * @Author: coderqiqin@aliyun.com 
  * @Date: 2020-01-18 19:27:42 
  * @Last Modified by: CoderQiQin
- * @Last Modified time: 2020-01-19 14:48:11
+ * @Last Modified time: 2020-01-20 12:35:28
  */
 
 /* ----------------------------------- lib ---------------------------------- */
@@ -41,18 +41,26 @@ app.get('/', (req, res) => {
 // 聊天相关
 io.on('connect', socket => {
   const socketId = socket.id
-
-  // 登录成功
+  console.log('socketId: ', socketId);
+  // 登录成功(在私聊页面每次刷新获取新的socketid保存到用户表)
   socket.on('login', async ({ id }) => {
-    console.log(123333333333333333333333);
-
-    // 找到对应用户  用户id,和生成的socketId
+    // console.log('前台传送id: ', id);
     let data = await modelUser.findByIdAndUpdate(id, { socketid: socketId }, { new: true, upsert: true, strict: false })
   })
 
-  socket.on('receiveComment', (res) => {
-
+  socket.on('receiveComment', async (res) => {
+    // console.log('res: ', res);
+    // 根据uid 查询socketid
+    // io.emit(res.to, res)
+    console.log('res.to: ', res.to);
+    // 获取对方的最新socketid
+    let { socketid } = await modelUser.findById(res.to)
+    console.log('接收socketid: ', socketid);
     // console.log(io.sockets.sockets);
+    io.to(socketid).emit('chat', res)
+    // from:来自, to: 发给谁
+    // res.to 对象emit('chat')
+
     // let socketObj
     // for (const key in io.sockets.sockets) {
     //   if (io.sockets.sockets.hasOwnProperty(key)) {

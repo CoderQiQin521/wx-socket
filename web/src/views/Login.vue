@@ -37,11 +37,7 @@ export default {
     },
     async login() {
       if (this.user.username && this.user.password) {
-        this.loginAction(this.user).then(res => {
-          this.$socket.emit("login", {
-            id: res.user._id
-          });
-        });
+        this.loginAction(this.user).then(res => {});
       } else {
         Dialog({ message: "请填写完整信息" });
       }

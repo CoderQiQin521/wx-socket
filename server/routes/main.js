@@ -2,7 +2,7 @@
  * @Author: coderqiqin@aliyun.com 
  * @Date: 2020-01-18 19:49:01 
  * @Last Modified by: CoderQiQin
- * @Last Modified time: 2020-01-18 22:31:06
+ * @Last Modified time: 2020-01-20 11:20:08
  */
 const express = require('express')
 const router = express.Router()
@@ -76,5 +76,15 @@ module.exports = app => {
       msg: "获取成功"
     })
   })
+
+  // 获取用户信息接口
+  app.get('/userinfo', authMiddleware(), async (req, res) => {
+    res.send({
+      err_code: 0,
+      data: req.user,
+      msg: "获取成功"
+    })
+  })
+
   app.use(router)
 }

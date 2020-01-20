@@ -2,7 +2,7 @@
  * @Author: coderqiqin@aliyun.com 
  * @Date: 2020-01-18 19:28:02 
  * @Last Modified by: CoderQiQin
- * @Last Modified time: 2020-01-18 21:42:12
+ * @Last Modified time: 2020-01-20 11:21:34
  */
 const jwt = require('jsonwebtoken')
 const modelUser = require('../models/user')

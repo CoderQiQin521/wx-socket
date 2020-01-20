@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar
-      title="私聊"
+      :title="$route.query.name"
       left-text="返回"
       right-text="成员"
       left-arrow
@@ -33,11 +33,33 @@ export default {
     return {
       show: false,
       value: "",
+      title: "",
       userinfo: {}
     };
   },
-  created() {
-    this.userinfo = storage.getStorage("userInfo");
+  sockets: {
+    // socketid(res) {
+    //   console.log("res: ", res);
+    // }
+    chat(res) {
+      console.log("收到消息");
+      console.log("res: ", res);
+    }
+  },
+  async created() {
+    let userinfo = storage.getStorage("userInfo");
+    // this.userinfo = userinfo;
+
+    // //res.user._id
+    // 发送发起聊天者的uid
+    this.$socket.emit("login", {
+      id: userinfo.user._id
+    });
+
+    console.log("onShow: ");
+    let { data } = await this.$api.userinfo();
+    this.userinfo = data;
+    console.log("data: ", data);
   },
   sockets: {
     chat(res) {
@@ -49,12 +71,10 @@ export default {
       this.show = !this.show;
     },
     send() {
-      console.log(this.userinfo);
-
       this.$socket.emit("receiveComment", {
         message: this.value,
-        from: this.$route.query.id, // 发给谁
-        to: this.userinfo.user.socketid, // 来自谁的消息
+        from: this.userinfo._id, // 来自谁的消息
+        to: this.$route.query.id, // 发给谁
         type: "private"
       });
       this.value = "";
